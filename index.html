@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jennings Farmhouse</title>
+  <meta name="description" content="A peaceful farmhouse stay outside Jennings, Louisiana." />
+
+  <style>
+    :root{
+      --bg:#0b0c0f;
+      --card:#12141a;
+      --text:#f4f6ff;
+      --muted:#b9c0d4;
+      --accent:#7dd3fc;
+      --border:rgba(255,255,255,.10);
+      --max:1100px;
+      --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:linear-gradient(180deg, #07080b, var(--bg));
+      color:var(--text);
+      line-height:1.5;
+    }
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 20px}
+    .section{padding:64px 0}
+    .card{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:22px;
+      backdrop-filter: blur(8px);
+    }
+    .muted{color:var(--muted)}
+    h1,h2{line-height:1.15; margin:0 0 12px}
+    h2{font-size:28px}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:12px 16px; border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.05);
+      font-weight:600;
+    }
+    .btn.primary{background:rgba(125,211,252,.15); border-color:rgba(125,211,252,.35)}
+    .btn:hover{transform: translateY(-1px)}
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      background:rgba(7,8,11,.72);
+      border-bottom:1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+    .topbar-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+      gap:16px;
+    }
+    .brand{font-weight:800; letter-spacing:.2px}
+    nav{display:flex; gap:14px; align-items:center; flex-wrap:wrap}
+    nav a{color:var(--muted); font-weight:600}
+    nav a:hover{color:var(--text)}
+    .hero{padding:42px 0 10px}
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .hero-img{
+      border-radius:var(--radius);
+      border:1px solid var(--border);
+      min-height:340px;
+      background:#0f1117 center/cover no-repeat;
+    }
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:10px;
+      margin-top:14px;
+    }
+    .kpi{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      background:rgba(255,255,255,.03);
+    }
+    .kpi .label{color:var(--muted); font-size:13px}
+    .kpi .value{font-weight:800; font-size:16px}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    .gallery{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+    }
+    .ph{
+      border-radius:14px;
+      border:1px solid var(--border);
+      min-height:180px;
+      background:#0f1117 center/cover no-repeat;
+      position:relative;
+      overflow:hidden;
+    }
+    .ph span{
+      position:absolute; left:10px; bottom:10px;
+      font-size:12px; color:rgba(255,255,255,.85);
+      background:rgba(0,0,0,.35);
+      padding:6px 8px; border-radius:10px;
+      border:1px solid rgba(255,255,255,.15);
+    }
+    .checks{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px 16px;
+      margin:0; padding:0; list-style:none;
+    }
+    .checks li{color:var(--muted)}
+    .checks li::before{content:"✓ "; color:var(--accent); font-weight:900}
+    details{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px 16px;
+      background:rgba(255,255,255,.03);
+    }
+    details + details{margin-top:10px}
+    summary{cursor:pointer; font-weight:700}
+    summary::-webkit-details-marker{display:none}
+    .footer{padding:34px 0 60px; border-top:1px solid var(--border); color:var(--muted)}
+    @media (max-width: 880px){
+      .hero-grid{grid-template-columns: 1fr}
+      .gallery{grid-template-columns: repeat(2, 1fr)}
+      .grid{grid-template-columns: 1fr}
+      .checks{grid-template-columns: repeat(2, 1fr)}
+      nav{display:none} /* keep simple on mobile; Book button stays */
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- EDIT ME: booking link(s) -->
+  <script>
+    const BOOKING_URL = "https://your-airbnb-link-here";
+  </script>
+
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand"><a href="#top">Jennings Farmhouse</a></div>
+      <nav aria-label="Primary">
+        <a href="#photos">Photos</a>
+        <a href="#about">About</a>
+        <a href="#amenities">Amenities</a>
+        <a href="#faq">FAQ</a>
+        <a href="#book">Book</a>
+      </nav>
+      <a class="btn primary" href="#book">Book Now</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <!-- EDIT ME: hero image -->
+        <div class="hero-img" style="background-image:url('background.jpg');"></div>
+
+        <div class="card">
+          <h1>Quiet farmhouse stay outside Jennings, Louisiana</h1>
+          <p class="muted">
+            A peaceful place to slow down—screened porches, wide skies, and an easy drive to town.
+          </p>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+            <a class="btn primary" href="" onclick="this.href=BOOKING_URL">Book on Airbnb</a>
+            <a class="btn" href="#photos">View Photos</a>
+          </div>
+
+          <!-- EDIT ME: quick facts -->
+          <div class="kpis">
+            <div class="kpi"><di
