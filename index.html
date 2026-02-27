@@ -2,183 +2,432 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Jennings Farmhouse</title>
-  <meta name="description" content="A peaceful farmhouse stay outside Jennings, Louisiana." />
+  <meta name="description" content="A quiet farmhouse stay outside Jennings, Louisiana." />
 
   <style>
     :root{
-      --bg:#0b0c0f;
-      --card:#12141a;
-      --text:#f4f6ff;
+      --bg: #07080b;
+      --panel: rgba(255,255,255,.04);
+      --border: rgba(255,255,255,.10);
+      --text: #f4f6ff;
       --muted:#b9c0d4;
       --accent:#7dd3fc;
-      --border:rgba(255,255,255,.10);
-      --max:1100px;
-      --radius:16px;
+
+      --max: 1100px;
+      --radius: 18px;
+
+      /* panel layout */
+      --gap: 28px;
+      --pad-y: 74px;
+      --pad-x: 22px;
+
+      /* image placeholder sizing */
+      --img-min-h: 420px;
     }
-    *{box-sizing:border-box}
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body{
-      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background:linear-gradient(180deg, #07080b, var(--bg));
-      color:var(--text);
-      line-height:1.5;
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% 0%, rgba(125,211,252,.08), transparent 60%),
+                  linear-gradient(180deg, #05060a, var(--bg));
+      color: var(--text);
+      line-height: 1.5;
     }
-    a{color:inherit; text-decoration:none}
-    .wrap{max-width:var(--max); margin:0 auto; padding:0 20px}
-    .section{padding:64px 0}
-    .card{
-      background:rgba(255,255,255,.03);
-      border:1px solid var(--border);
-      border-radius:var(--radius);
-      padding:22px;
-      backdrop-filter: blur(8px);
-    }
-    .muted{color:var(--muted)}
-    h1,h2{line-height:1.15; margin:0 0 12px}
-    h2{font-size:28px}
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      padding:12px 16px; border-radius:999px;
-      border:1px solid var(--border);
-      background:rgba(255,255,255,.05);
-      font-weight:600;
-    }
-    .btn.primary{background:rgba(125,211,252,.15); border-color:rgba(125,211,252,.35)}
-    .btn:hover{transform: translateY(-1px)}
-    .topbar{
-      position:sticky; top:0; z-index:50;
-      background:rgba(7,8,11,.72);
-      border-bottom:1px solid var(--border);
+    a{ color: inherit; text-decoration: none; }
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 0 var(--pad-x); }
+
+    /* Sticky header */
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(7,8,11,.72);
       backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
     }
-    .topbar-inner{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 0;
-      gap:16px;
+    .header-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      padding: 14px 0;
     }
-    .brand{font-weight:800; letter-spacing:.2px}
-    nav{display:flex; gap:14px; align-items:center; flex-wrap:wrap}
-    nav a{color:var(--muted); font-weight:600}
-    nav a:hover{color:var(--text)}
-    .hero{padding:42px 0 10px}
-    .hero-grid{
+    .brand{
+      font-weight: 850;
+      letter-spacing: .2px;
+      white-space: nowrap;
+    }
+    nav{
+      display:flex;
+      align-items:center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    nav a{
+      color: var(--muted);
+      font-weight: 650;
+      font-size: 14px;
+    }
+    nav a:hover{ color: var(--text); }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      font-weight: 750;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .btn.primary{
+      background: rgba(125,211,252,.15);
+      border-color: rgba(125,211,252,.35);
+    }
+
+    /* Continuous scroll + snap panels */
+    main{
+      scroll-snap-type: y mandatory;
+    }
+    section.panel{
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      min-height: 100vh;
+      display:flex;
+      align-items:center;
+      padding: var(--pad-y) 0;
+    }
+
+    /* panel card */
+    .panel-card{
+      width: 100%;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+    }
+
+    /* 50/50 split */
+    .split{
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:18px;
-      align-items:stretch;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+      align-items: stretch;
     }
-    .hero-img{
-      border-radius:var(--radius);
-      border:1px solid var(--border);
-      min-height:340px;
-      background:#0f1117 center/cover no-repeat;
+
+    /* Swap image/text sides per section by adding .img-right */
+    .img-right .media { order: 2; }
+    .img-right .copy  { order: 1; }
+
+    /* Image / media placeholder */
+    .media{
+      border-radius: calc(var(--radius) - 6px);
+      border: 1px solid var(--border);
+      min-height: var(--img-min-h);
+      background: #0f1117 center/cover no-repeat;
+      position: relative;
+      overflow: hidden;
     }
-    .kpis{
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap:10px;
-      margin-top:14px;
+    .media::after{
+      content: "IMAGE PLACEHOLDER";
+      position: absolute;
+      inset: 0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color: rgba(255,255,255,.55);
+      letter-spacing: .18em;
+      font-weight: 800;
+      font-size: 12px;
+      background: linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.35));
+      border-radius: calc(var(--radius) - 6px);
     }
-    .kpi{
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:12px;
-      background:rgba(255,255,255,.03);
+    /* If you set a real image via style="background-image:url(...)" it still shows the label.
+       Remove the label by adding class "media no-label" to that element. */
+    .media.no-label::after{ display:none; }
+
+    /* Text column */
+    .copy{
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8px 4px;
     }
-    .kpi .label{color:var(--muted); font-size:13px}
-    .kpi .value{font-weight:800; font-size:16px}
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:14px;
+    .eyebrow{
+      color: rgba(125,211,252,.95);
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-size: 12px;
+      margin-bottom: 10px;
     }
-    .gallery{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:10px;
+    h1,h2{ margin:0 0 10px; line-height: 1.12; }
+    h1{ font-size: 40px; }
+    h2{ font-size: 30px; }
+    p{ margin: 0 0 12px; color: var(--muted); }
+    .bullets{ margin: 10px 0 0; padding-left: 18px; color: var(--muted); }
+    .bullets li{ margin: 6px 0; }
+
+    /* Footer panel */
+    footer{
+      padding: 24px 0 60px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
     }
-    .ph{
-      border-radius:14px;
-      border:1px solid var(--border);
-      min-height:180px;
-      background:#0f1117 center/cover no-repeat;
-      position:relative;
-      overflow:hidden;
-    }
-    .ph span{
-      position:absolute; left:10px; bottom:10px;
-      font-size:12px; color:rgba(255,255,255,.85);
-      background:rgba(0,0,0,.35);
-      padding:6px 8px; border-radius:10px;
-      border:1px solid rgba(255,255,255,.15);
-    }
-    .checks{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:10px 16px;
-      margin:0; padding:0; list-style:none;
-    }
-    .checks li{color:var(--muted)}
-    .checks li::before{content:"✓ "; color:var(--accent); font-weight:900}
-    details{
-      border:1px solid var(--border);
-      border-radius:14px;
-      padding:14px 16px;
-      background:rgba(255,255,255,.03);
-    }
-    details + details{margin-top:10px}
-    summary{cursor:pointer; font-weight:700}
-    summary::-webkit-details-marker{display:none}
-    .footer{padding:34px 0 60px; border-top:1px solid var(--border); color:var(--muted)}
-    @media (max-width: 880px){
-      .hero-grid{grid-template-columns: 1fr}
-      .gallery{grid-template-columns: repeat(2, 1fr)}
-      .grid{grid-template-columns: 1fr}
-      .checks{grid-template-columns: repeat(2, 1fr)}
-      nav{display:none} /* keep simple on mobile; Book button stays */
+
+    /* Responsive */
+    @media (max-width: 920px){
+      nav{ display:none; } /* keep header clean on mobile; anchors still work */
+      section.panel{ padding: 56px 0; min-height: auto; }
+      main{ scroll-snap-type: none; } /* snapping can feel harsh on mobile */
+      .split{ grid-template-columns: 1fr; }
+      .media{ min-height: 260px; }
+      h1{ font-size: 34px; }
+      h2{ font-size: 26px; }
+      .img-right .media, .img-right .copy { order: initial; } /* natural stacking */
     }
   </style>
 </head>
 
 <body>
-
-  <!-- EDIT ME: booking link(s) -->
+  <!-- EDIT ME: Your booking link (Airbnb/VRBO) -->
   <script>
-    const BOOKING_URL = "https://your-airbnb-link-here";
+    const BOOKING_URL = "https://your-booking-link-here";
   </script>
 
-  <header class="topbar">
-    <div class="wrap topbar-inner">
-      <div class="brand"><a href="#top">Jennings Farmhouse</a></div>
-      <nav aria-label="Primary">
+  <header>
+    <div class="wrap header-inner">
+      <div class="brand"><a href="#home">Jennings Farmhouse</a></div>
+
+      <nav aria-label="Site">
+        <a href="#home">Home</a>
         <a href="#photos">Photos</a>
         <a href="#about">About</a>
         <a href="#amenities">Amenities</a>
         <a href="#faq">FAQ</a>
         <a href="#book">Book</a>
       </nav>
+
       <a class="btn primary" href="#book">Book Now</a>
     </div>
   </header>
 
-  <main id="top">
-    <section class="hero">
-      <div class="wrap hero-grid">
-        <!-- EDIT ME: hero image -->
-        <div class="hero-img" style="background-image:url('background.jpg');"></div>
+  <main>
+    <!-- PANEL 1: HOME / HERO (image left, text right) -->
+    <section id="home" class="panel">
+      <div class="wrap">
+        <div class="panel-card">
+          <div class="split">
+            <!-- EDIT ME: hero image -->
+            <div class="media no-label" style="background-image:url('images/background.jpg');"></div>
 
-        <div class="card">
-          <h1>Quiet farmhouse stay outside Jennings, Louisiana</h1>
-          <p class="muted">
-            A peaceful place to slow down—screened porches, wide skies, and an easy drive to town.
-          </p>
+            <div class="copy">
+              <div class="eyebrow">Farmhouse Stay</div>
+              <h1>Quiet Louisiana farmhouse outside Jennings</h1>
+              <p>
+                <!-- EDIT ME -->
+                Screened porches, wide skies, and a calm rural setting—built for slow mornings and easy evenings.
+              </p>
 
-          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-            <a class="btn primary" href="" onclick="this.href=BOOKING_URL">Book on Airbnb</a>
-            <a class="btn" href="#photos">View Photos</a>
+              <ul class="bullets">
+                <!-- EDIT ME -->
+                <li>Sleeps: X • Beds: X • Baths: X</li>
+                <li>Fast Wi-Fi • Self check-in • Free parking</li>
+                <li>Easy day trips: Lafayette, Lake Charles, Lake Arthur, Avery Island</li>
+              </ul>
+
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
+                <a class="btn primary" href="" onclick="this.href=BOOKING_URL">Book on Airbnb</a>
+                <a class="btn" href="#photos">Scroll for photos</a>
+              </div>
+
+              <p style="margin-top:12px; font-size:13px; color:rgba(185,192,212,.9);">
+                <!-- EDIT ME (optional) -->
+                Rural setting. Peaceful nights. Some seasonal farm activity may be visible during daytime.
+              </p>
+            </div>
           </div>
+        </div>
+      </div>
+    </section>
 
-          <!-- EDIT ME: quick facts -->
-          <div class="kpis">
-            <div class="kpi"><di
+    <!-- PANEL 2: PHOTOS (image right, text left) -->
+    <section id="photos" class="panel img-right">
+      <div class="wrap">
+        <div class="panel-card">
+          <div class="split">
+            <!-- EDIT ME: choose a single “gallery collage” image or a favorite shot -->
+            <div class="media" style="background-image:url('images/gallery-collage.jpg');"></div>
+
+            <div class="copy">
+              <div class="eyebrow">Photos</div>
+              <h2>A quick look around</h2>
+              <p>
+                <!-- EDIT ME -->
+                Add your best 10–14 images to your Airbnb listing, and feature the top 1–3 here for fast trust.
+                (This panel can also link out to the listing.)
+              </p>
+              <ul class="bullets">
+                <!-- EDIT ME -->
+                <li>Screened porch + seating</li>
+                <li>Living room + kitchen</li>
+                <li>Bedrooms + baths</li>
+                <li>Yard + fields at sunset</li>
+              </ul>
+
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
+                <a class="btn" href="" onclick="this.href=BOOKING_URL">View full gallery on Airbnb</a>
+              </div>
+
+              <p style="margin-top:12px; font-size:13px; color:rgba(185,192,212,.9);">
+                Tip: keep web images ~1200–1600px wide and under ~500KB for speed.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 3: ABOUT (image left, text right) -->
+    <section id="about" class="panel">
+      <div class="wrap">
+        <div class="panel-card">
+          <div class="split">
+            <!-- EDIT ME -->
+            <div class="media" style="background-image:url('images/about-livingroom.jpg');"></div>
+
+            <div class="copy">
+              <div class="eyebrow">About</div>
+              <h2>Comfortable, simple, and quiet</h2>
+              <p>
+                <!-- EDIT ME -->
+                Jennings Farmhouse is a peaceful place to reset—comfortable beds, a functional kitchen, and
+                porches that invite you to linger.
+              </p>
+              <ul class="bullets">
+                <!-- EDIT ME -->
+                <li>Best for: couples, families, small groups</li>
+                <li>Not a fit for: parties or loud gatherings</li>
+                <li>Great for: relaxing, remote work, day trips</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 4: AMENITIES (image right, text left) -->
+    <section id="amenities" class="panel img-right">
+      <div class="wrap">
+        <div class="panel-card">
+          <div class="split">
+            <!-- EDIT ME -->
+            <div class="media" style="background-image:url('images/amenities-kitchen.jpg');"></div>
+
+            <div class="copy">
+              <div class="eyebrow">Amenities</div>
+              <h2>Everything you need (nothing you don’t)</h2>
+              <p>
+                <!-- EDIT ME -->
+                Keep this list aligned with your Airbnb amenities so guests see a consistent story everywhere.
+              </p>
+              <ul class="bullets">
+                <!-- EDIT ME -->
+                <li>Wi-Fi • AC/Heat • Washer/Dryer</li>
+                <li>Coffee • cookware • dishwasher</li>
+                <li>Fresh linens + towels</li>
+                <li>Screened porch seating • grill</li>
+              </ul>
+              <p style="margin-top:10px;">
+                <!-- EDIT ME -->
+                Optional: include Wi-Fi speed, desk/workspace details, and parking notes.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 5: FAQ (image left, text right) -->
+    <section id="faq" class="panel">
+      <div class="wrap">
+        <div class="panel-card">
+          <div class="split">
+            <!-- EDIT ME -->
+            <div class="media" style="background-image:url('images/faq-porch.jpg');"></div>
+
+            <div class="copy">
+              <div class="eyebrow">FAQ</div>
+              <h2>Quick answers</h2>
+
+              <!-- EDIT ME: replace Q/A text -->
+              <p><strong>How far is it from Jennings?</strong><br><span class="muted">About X minutes to downtown Jennings.</span></p>
+              <p><strong>Is the Wi-Fi good for work and streaming?</strong><br><span class="muted">Yes for typical use. (Add speed here.)</span></p>
+              <p><strong>Pets allowed?</strong><br><span class="muted">State your policy clearly and match Airbnb.</span></p>
+              <p><strong>Check-in / check-out?</strong><br><span class="muted">Check-in X:00 PM • Check-out X:00 AM.</span></p>
+              <p><strong>Events or visitors?</strong><br><span class="muted">Usually no parties; visitors by approval.</span></p>
+
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
+                <a class="btn" href="#book">How to book</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL 6: BOOKING (image right, text left) -->
+    <section id="book" class="panel img-right">
+      <div class="wrap">
+        <div class="panel-card">
+          <div class="split">
+            <!-- EDIT ME -->
+            <div class="media" style="background-image:url('images/book-sunset.jpg');"></div>
+
+            <div class="copy">
+              <div class="eyebrow">How to Book</div>
+              <h2>Reserve in under a minute</h2>
+              <ol style="margin:0; padding-left:18px; color:var(--muted);">
+                <!-- EDIT ME -->
+                <li>Select your dates.</li>
+                <li>Book securely on Airbnb.</li>
+                <li>Receive check-in instructions after confirmation.</li>
+              </ol>
+
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:16px;">
+                <a class="btn primary" href="" onclick="this.href=BOOKING_URL">Book Now</a>
+                <!-- EDIT ME: optional contact -->
+                <a class="btn" href="mailto:info@jenningsfarmhouse.com">Email a question</a>
+              </div>
+
+              <p style="margin-top:12px; font-size:13px; color:rgba(185,192,212,.9);">
+                <!-- EDIT ME (optional) -->
+                For the fastest support after booking, message through Airbnb.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <footer>
+          <div class="wrap" style="padding:0;">
+            <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+              <div>© <span id="year"></span> Jennings Farmhouse</div>
+              <div><a href="#home">Back to top ↑</a></div>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
